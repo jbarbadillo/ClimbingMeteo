@@ -13,8 +13,14 @@ public class HttpClient {
     public final static OkHttpClient client = new OkHttpClient(); // TODO: use a builder?
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-    
-    public static void get(){
+
+    public static String get(String url) throws IOException{
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return response.body().string();
 
     }
     public static String post(String url, String json) throws IOException {
