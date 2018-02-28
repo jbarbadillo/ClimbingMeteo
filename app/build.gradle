@@ -39,7 +39,7 @@ private String generateVersionName() {
     if (ext.versionClassifier != null) {
         versionName += "-" + ext.versionClassifier
     }
-    return versionName;
+    return versionName
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
