@@ -28,7 +28,7 @@ public class HttpClient {
 
     }
     public static String post(String url, String json) throws IOException {
-        // TODO: build body outside
+        // TODO: build body from json
         RequestBody body = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("email", "jbarbadillo@gmail.com")
