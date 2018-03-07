@@ -1,6 +1,7 @@
 package com.javirock.meteoclimb.models;
 
 import java.io.File;
+import java.io.IOError;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +34,42 @@ public class HttpClient {
                 .build();
     }
 
+    public static Response performSimpleRequest(HttpRequest request){
+        Request okHttpRequest;
+        Response okHttpResponse = null;
+        try{
+            Request.Builder builder = new Request.Builder().url(request.getUrl());
+            addHeadersToRequestBuilder(builder, request);
+            RequestBody requestBody = null;
+            switch (request.getMethod()) {
+                case GET: {
+                    builder = builder.get();
+                    break;
+                }
+                case POST: {
+                    requestBody = request.getRequestBody();
+                    builder = builder.post(requestBody);
+                    break;
+                }
+                case PUT: {
+                    requestBody = request.getRequestBody();
+                    builder = builder.put(requestBody);
+                    break;
+                }
+            }
+            okHttpRequest = builder.build();
+            if (request.getOkHttpClient() != null) {
+                request.setCall(request.getOkHttpClient().newBuilder().cache(httpClient.cache()).build().newCall(okHttpRequest));
+            } else {
+                request.setCall(httpClient.newCall(okHttpRequest));
+            }
+            okHttpResponse = request.getCall().execute();            
 
+        }catch(IOError e){
+
+        }
+        return okHttpResponse;
+    }
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
