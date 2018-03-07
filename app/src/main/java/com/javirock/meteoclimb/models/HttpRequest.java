@@ -20,6 +20,10 @@ public class HttpRequest {
     private int mRequestType;
     private String mUrl;
     //private ResponseType mResponseType;
+    private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
+    private MediaType customMediaType = null;
+    private HashMap<String, String> mBodyParameterMap = new HashMap<>();
+    private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
     private String mApplicationJsonString = null;
     private static final MediaType JSON_MEDIA_TYPE =
             MediaType.parse("application/json; charset=utf-8");
