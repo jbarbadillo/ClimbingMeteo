@@ -40,10 +40,18 @@ public class HttpRequest {
 
     }
     public static class PostRequestBuilder{
-
+        private int mMethod = Method.POST;
+        private String mUrl;
+        public PostRequestBuilder(String url) {
+            this.mUrl = url;
+        }
     }
     public static class GetRequestBuilder{
-        
+        private int mMethod = Method.GET;
+        private String mUrl;
+        public GetRequestBuilder(String url, int method) {
+            this.mUrl = url;
+        }
     }
     /**
      * Gets the endpoint url for this request
