@@ -5,6 +5,7 @@ import java.io.IOError;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -34,75 +35,22 @@ public class HttpClient {
                 .build();
     }
 
-    public static Response performSimpleRequest(HttpRequest request){
-        Request okHttpRequest;
-        Response okHttpResponse = null;
-        try{
-            Request.Builder builder = new Request.Builder().url(request.getUrl());
-            //addHeaders(builder, request);
-            RequestBody requestBody = null;
-            switch (request.getMethod()) {
-                case GET: {
-                    builder = builder.get();
-                    break;
-                }
-                case POST: {
-                    requestBody = request.getRequestBody();
-                    builder = builder.post(requestBody);
-                    break;
-                }
-                case PUT: {
-                    requestBody = request.getRequestBody();
-                    builder = builder.put(requestBody);
-                    break;
-                }
-            }
-            okHttpRequest = builder.build();
-            if (request.getOkHttpClient() != null) {
-                request.setCall(request.getOkHttpClient().newBuilder().cache(httpClient.cache()).build().newCall(okHttpRequest));
-            } else {
-                request.setCall(httpClient.newCall(okHttpRequest));
-            }
-            okHttpResponse = request.getCall().execute();            
-
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        return okHttpResponse;
+    
+    public static void asyncGet(Request request, Callback callback){
+        httpClient.newCall(request).enqueue(callback);
     }
-    /*public static void addHeaders(Request.Builder builder, HttpRequest request) {
-        if (request.getUserAgent() != null) {
-            builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-        } else if (sUserAgent != null) {
-            request.setUserAgent(sUserAgent);
-            builder.addHeader(ANConstants.USER_AGENT, sUserAgent);
-        }
-        Headers requestHeaders = request.getHeaders();
-        if (requestHeaders != null) {
-            builder.headers(requestHeaders);
-            if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
-                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-            }
-        }
-    }*/
-
-
-    public static String get(String url) throws IOException{
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
+    public static String syncGet(Request request) throws IOException{
         Response response = httpClient.newCall(request).execute();
         return response.body().string();
 
     }
 
-    public static String postMultipart(String url, String json) throws IOException {
-        RequestBody body = RequestBody.create(JSON, json);
+    public static String syncPostMultipart(Request request) throws IOException {
+        /*RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .build();
+                .build();*/
         Response response = httpClient.newCall(request).execute();
         return response.body().string();
     }
