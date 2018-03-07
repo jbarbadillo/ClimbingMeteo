@@ -13,6 +13,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.javirock.meteoclimb.models.HttpMethod.GET;
+import static com.javirock.meteoclimb.models.HttpMethod.POST;
+
 
 public class HttpClient {
     public static OkHttpClient httpClient = getHttpClient();
@@ -35,26 +38,22 @@ public class HttpClient {
                 .build();
     }
 
-    
-    public static void asyncGet(Request request, Callback callback){
+    public static void syncRequest(HttpMethod method, Request request){
+        switch (method.hashCode()){
+            case GET: {
+                break;
+            }
+            case POST: {
+                break;
+            }
+        }
+        Response response = httpClient.newCall(request).execute();
+        return response.body().string();
+    }
+    public static void asyncRequest(HttpMethod method, Request request, Callback callback){
         httpClient.newCall(request).enqueue(callback);
     }
-    public static String syncGet(Request request) throws IOException{
-        Response response = httpClient.newCall(request).execute();
-        return response.body().string();
 
-    }
 
-    public static String syncPostMultipart(Request request) throws IOException {
-        /*RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();*/
-        Response response = httpClient.newCall(request).execute();
-        return response.body().string();
-    }
-    public static void put(){
 
-    }
 }
