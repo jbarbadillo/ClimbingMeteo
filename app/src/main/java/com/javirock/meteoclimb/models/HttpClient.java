@@ -39,7 +39,7 @@ public class HttpClient {
         Response okHttpResponse = null;
         try{
             Request.Builder builder = new Request.Builder().url(request.getUrl());
-            addHeadersToRequestBuilder(builder, request);
+            //addHeaders(builder, request);
             RequestBody requestBody = null;
             switch (request.getMethod()) {
                 case GET: {
@@ -70,7 +70,21 @@ public class HttpClient {
         }
         return okHttpResponse;
     }
-
+    /*public static void addHeaders(Request.Builder builder, HttpRequest request) {
+        if (request.getUserAgent() != null) {
+            builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
+        } else if (sUserAgent != null) {
+            request.setUserAgent(sUserAgent);
+            builder.addHeader(ANConstants.USER_AGENT, sUserAgent);
+        }
+        Headers requestHeaders = request.getHeaders();
+        if (requestHeaders != null) {
+            builder.headers(requestHeaders);
+            if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
+                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
+            }
+        }
+    }*/
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
