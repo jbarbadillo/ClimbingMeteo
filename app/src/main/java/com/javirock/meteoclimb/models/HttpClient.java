@@ -2,6 +2,7 @@ package com.javirock.meteoclimb.models;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -12,18 +13,41 @@ import okhttp3.Response;
 
 
 public class HttpClient {
-    public final static OkHttpClient client = new OkHttpClient(); // TODO: use a builder?
+    public static OkHttpClient httpClient = getHttpClient();
+
+    /**
+     * Gets an instance of the client
+     * @return An okhttp client instance
+     */
+    public static OkHttpClient getHttpClient() {
+        if (httpClient == null) {
+            return getDefaultClient();
+        }
+        return httpClient;
+    }
+    public static OkHttpClient getDefaultClient() {
+        return new OkHttpClient().newBuilder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+    }
+
+
+
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
     private static final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
+
+
 
     public static String get(String url) throws IOException{
         Request request = new Request.Builder()
                 .url(url)
                 .build();
 
-        Response response = client.newCall(request).execute();
+        Response response = httpClient.newCall(request).execute();
         return response.body().string();
 
     }
@@ -42,7 +66,7 @@ public class HttpClient {
                 .post(body)
                 .build();
 
-        Response response = client.newCall(request).execute();
+        Response response = httpClient.newCall(request).execute();
         return response.body().string();
     }
     public static String postMultipart(String url, String json) throws IOException {
@@ -51,7 +75,7 @@ public class HttpClient {
                 .url(url)
                 .post(body)
                 .build();
-        Response response = client.newCall(request).execute();
+        Response response = httpClient.newCall(request).execute();
         return response.body().string();
     }
     public static void put(){
