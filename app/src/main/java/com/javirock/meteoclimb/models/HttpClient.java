@@ -65,8 +65,8 @@ public class HttpClient {
             }
             okHttpResponse = request.getCall().execute();            
 
-        }catch(IOError e){
-
+        }catch (IOException e) {
+            e.printStackTrace();
         }
         return okHttpResponse;
     }

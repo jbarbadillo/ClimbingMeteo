@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 
 /**
@@ -27,6 +29,22 @@ public class HttpRequest {
     private String mApplicationJsonString = null;
     private static final MediaType JSON_MEDIA_TYPE =
             MediaType.parse("application/json; charset=utf-8");
+
+    private OkHttpClient mOkHttpClient = null;
+    private Call call;
+
+    public HttpRequest(GetRequestBuilder builder){
+
+    }
+    public HttpRequest(PostRequestBuilder builder){
+
+    }
+    public static class PostRequestBuilder{
+
+    }
+    public static class GetRequestBuilder{
+        
+    }
     /**
      * Gets the endpoint url for this request
      *
@@ -40,6 +58,15 @@ public class HttpRequest {
     }
     public int getRequestType() {
         return mRequestType;
+    }
+    public OkHttpClient getOkHttpClient() {
+        return mOkHttpClient;
+    }
+    public Call getCall() {
+        return call;
+    }
+    public void setCall(Call call) {
+        this.call = call;
     }
     public Headers getHeaders() {
         Headers.Builder builder = new Headers.Builder();
@@ -81,5 +108,14 @@ public class HttpRequest {
             }
             return builder.build();
         }
+    }
+    public interface Method {
+        int GET = 0;
+        int POST = 1;
+        int PUT = 2;
+        int DELETE = 3;
+        int HEAD = 4;
+        int PATCH = 5;
+        int OPTIONS = 6;
     }
 }
