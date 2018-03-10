@@ -38,20 +38,21 @@ public class HttpClient {
                 .build();
     }
 
-   /* public static void syncRequest(HttpMethod method, Request request){
-        switch (method.hashCode()){
+    public static Response syncRequest(int method, Request request) throws IOException {
+        Response response = null;
+        switch (method){
             case GET: {
-                syncGet();
+                response = syncGet(request);
                 break;
             }
             case POST: {
-                syncPost();
+                //response syncPost();
                 break;
             }
         }
-        Response response = httpClient.newCall(request).execute();
-        return response.body().string();
-    }*/
+
+        return response;
+    }
     public static void asyncRequest(int method, Request request, Callback callback){
         switch (method){
             case GET: {
@@ -65,9 +66,14 @@ public class HttpClient {
         }
         httpClient.newCall(request).enqueue(callback);
     }
-    /*private Response syncGet(){
+    private static Response syncGet(Request request) throws IOException{
+        try (Response response = getHttpClient().newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            return response;
+        }
 
     }
+    /*
     private Response syncPost(){
 
     }*/

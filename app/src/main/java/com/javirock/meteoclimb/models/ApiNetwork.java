@@ -3,6 +3,8 @@ package com.javirock.meteoclimb.models;
 
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -17,7 +19,7 @@ import okhttp3.ResponseBody;
  */
 
 public class ApiNetwork {
-    private static final String ENDPOINT = "https://api.github.com/repos/square/okhttp/contributors";
+    private static final String URL = "https://www.metaweather.com/api/";
     private static final String AUTH_BEARER = "";
 
     private static Callback isAliveCallback = new Callback(){
@@ -32,7 +34,7 @@ public class ApiNetwork {
                 }
 
                 Log.i("ApiNetwork", "Code: " + response.code());
-                Log.i("ApiNetwork", responseBody.string());
+                //Log.i("ApiNetwork", responseBody.string());
             }
         }
         @Override
@@ -47,4 +49,15 @@ public class ApiNetwork {
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, isAliveCallback);
     }
+    public static JSONObject getLocation(String location) throws IOException {
+        Request request = new Request.Builder()
+                .url(URL+Endpoints.LOCATION_SEARCH+"?query="+location)
+                .method("GET", null)
+                .build();
+        HttpClient.syncRequest(HttpMethod.GET, request);
+
+        //Parse response un JSON
+        return null;
+    }
+
 }
