@@ -1,8 +1,11 @@
 package com.javirock.meteoclimb.models;
 
 
+import android.util.JsonReader;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -48,7 +51,15 @@ public class ApiNetwork {
             try(ResponseBody responseBody = response.body()){
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 Log.i("ApiNetwork", "Code: " + response.code());
-                Log.i("ApiNetwork", responseBody.string());
+
+                String jsonData = responseBody.string();
+                try {
+                    JSONObject json = new JSONObject(jsonData);
+                    String url = json.getString("datos");
+                    getData(url);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         @Override
@@ -62,7 +73,8 @@ public class ApiNetwork {
             try(ResponseBody responseBody = response.body()){
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 Log.i("ApiNetwork", "Code: " + response.code());
-                Log.i("ApiNetwork", responseBody.string());
+
+
             }
 
         }
@@ -71,6 +83,36 @@ public class ApiNetwork {
             e.printStackTrace();
         }
     };
+    private static Callback getDataCallback = new Callback(){
+        @Override
+        public void onResponse(Call call, Response response) throws IOException{
+            try(ResponseBody responseBody = response.body()){
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                Log.i("ApiNetwork", "Code: " + response.code());
+
+                String jsonData = responseBody.string();
+                try {
+                    JSONObject json = new JSONObject(jsonData);
+                    JSONArray precipitaciones = json.getJSONArray("probPrecipitacion");
+                    Log.i("ApiNetwork", "Precip: " + precipitaciones.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        @Override
+        public void onFailure(Call call, IOException e) {
+            e.printStackTrace();
+        }
+    };
+    public static void getData(String url){
+        Request request = new Request.Builder()
+                .url(url)
+                .method("GET", null)
+                .build();
+        HttpClient.asyncRequest(HttpMethod.GET, request, getDataCallback);
+    }
     public static void isAlive(){
         Request request = new Request.Builder()
                 .url("http://publicobject.com/helloworld.txt")
