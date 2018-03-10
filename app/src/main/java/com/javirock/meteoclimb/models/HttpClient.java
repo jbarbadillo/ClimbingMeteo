@@ -38,7 +38,7 @@ public class HttpClient {
                 .build();
     }
 
-    public static void syncRequest(HttpMethod method, Request request){
+   /* public static void syncRequest(HttpMethod method, Request request){
         switch (method.hashCode()){
             case GET: {
                 syncGet();
@@ -51,8 +51,8 @@ public class HttpClient {
         }
         Response response = httpClient.newCall(request).execute();
         return response.body().string();
-    }
-public static void asyncRequest(int method, Request request, Callback callback){
+    }*/
+    public static void asyncRequest(int method, Request request, Callback callback){
         switch (method){
             case GET: {
                 asyncGet();
@@ -65,16 +65,16 @@ public static void asyncRequest(int method, Request request, Callback callback){
         }
         httpClient.newCall(request).enqueue(callback);
     }
-    private Response syncGet(){
+    /*private Response syncGet(){
 
     }
     private Response syncPost(){
 
-    }
-    private void asyncGet(){
+    }*/
+    private static void asyncGet(){
 
     }
-    private void asyncPost(){
+    private static void asyncPost(){
 
     }
 
