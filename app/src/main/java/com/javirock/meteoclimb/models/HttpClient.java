@@ -52,8 +52,8 @@ public class HttpClient {
         Response response = httpClient.newCall(request).execute();
         return response.body().string();
     }
-    public static void asyncRequest(HttpMethod method, Request request, Callback callback){
-        switch (method.hashCode()){
+public static void asyncRequest(int method, Request request, Callback callback){
+        switch (method){
             case GET: {
                 asyncGet();
                 break;
