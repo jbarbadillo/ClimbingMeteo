@@ -8,8 +8,11 @@ import android.widget.Button;
 import com.javirock.meteoclimb.R;
 import com.javirock.meteoclimb.models.ApiNetwork;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
-    Button mBtnIsAlive = null;
+    Button mEtxauri = null;
+    Button mBaltzola = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,10 +23,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        mBtnIsAlive = findViewById(R.id.btn_isalive);
-        mBtnIsAlive.setOnClickListener(new View.OnClickListener() {
+        mEtxauri = findViewById(R.id.btn_etxauri);
+        mEtxauri.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ApiNetwork.isAlive();
+                try {
+                    ApiNetwork.getTownPredictionDay("31085");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        mBaltzola = findViewById(R.id.btn_baltzola);
+        mBaltzola.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    ApiNetwork.getTownPredictionDay("48026");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

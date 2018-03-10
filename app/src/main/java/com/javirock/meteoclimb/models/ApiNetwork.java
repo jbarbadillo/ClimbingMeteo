@@ -19,8 +19,8 @@ import okhttp3.ResponseBody;
  */
 
 public class ApiNetwork {
-    private static final String URL = "https://www.metaweather.com/api/";
-    private static final String AUTH_BEARER = "";
+    private static final String URL = "https://opendata.aemet.es/opendata/api/";
+    private static final String API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZpZXIuYmFyYmFkaWxsb0BnbWFpbC5jb20iLCJqdGkiOiJjZmJhN2U3Ny05YWY5LTQ5ZWEtYTU5NC04ZGE0Mjc3NTZlNmQiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTUyMDcxMjcwMywidXNlcklkIjoiY2ZiYTdlNzctOWFmOS00OWVhLWE1OTQtOGRhNDI3NzU2ZTZkIiwicm9sZSI6IiJ9.ryUk5Wljb7pmcfxJVyztO_tyzyPdv5peCaKRG5lpM_Y";
 
     private static Callback isAliveCallback = new Callback(){
         @Override
@@ -42,6 +42,35 @@ public class ApiNetwork {
             e.printStackTrace();
         }
     };
+    private static Callback predictionDayCallback = new Callback(){
+        @Override
+        public void onResponse(Call call, Response response) throws IOException{
+            try(ResponseBody responseBody = response.body()){
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                Log.i("ApiNetwork", "Code: " + response.code());
+                Log.i("ApiNetwork", responseBody.string());
+            }
+        }
+        @Override
+        public void onFailure(Call call, IOException e) {
+            e.printStackTrace();
+        }
+    };
+    private static Callback predictionHoursCallback = new Callback(){
+        @Override
+        public void onResponse(Call call, Response response) throws IOException{
+            try(ResponseBody responseBody = response.body()){
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                Log.i("ApiNetwork", "Code: " + response.code());
+                Log.i("ApiNetwork", responseBody.string());
+            }
+
+        }
+        @Override
+        public void onFailure(Call call, IOException e) {
+            e.printStackTrace();
+        }
+    };
     public static void isAlive(){
         Request request = new Request.Builder()
                 .url("http://publicobject.com/helloworld.txt")
@@ -49,15 +78,36 @@ public class ApiNetwork {
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, isAliveCallback);
     }
-    public static JSONObject getLocation(String location) throws IOException {
+    public static JSONObject getSpainTowns(String location) throws IOException {
         Request request = new Request.Builder()
-                .url(URL+Endpoints.LOCATION_SEARCH+"?query="+location)
+                .url(URL+Endpoints.MUNICIPIOS)
                 .method("GET", null)
                 .build();
         HttpClient.syncRequest(HttpMethod.GET, request);
 
         //Parse response un JSON
         return null;
+    }
+    public static void getTownPredictionHours(String id) throws IOException {
+        Request request = new Request.Builder()
+                .url(URL+Endpoints.MUNICIPIO_HORARIA+"/"+id)
+                .addHeader("API_KEY", API_KEY)
+                .method("GET", null)
+                .build();
+
+        Log.i("ApiNetwork", "Request: " + request.toString());
+        HttpClient.asyncRequest(HttpMethod.GET, request, predictionHoursCallback);
+
+    }
+    public static void getTownPredictionDay(String id) throws IOException {
+        Request request = new Request.Builder()
+                .url(URL+Endpoints.MUNICIPIO_DIARIA+id)
+                .addHeader("API_KEY", API_KEY)
+                .method("GET", null)
+                .build();
+        Log.i("ApiNetwork", "Request: " + request.toString());
+        HttpClient.asyncRequest(HttpMethod.GET, request, predictionDayCallback);
+
     }
 
 }
