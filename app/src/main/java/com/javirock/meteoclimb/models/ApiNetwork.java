@@ -1,6 +1,8 @@
 package com.javirock.meteoclimb.models;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -26,10 +28,11 @@ public class ApiNetwork {
 
                 Headers responseHeaders = response.headers();
                 for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                    Log.i("ApiNetwork",responseHeaders.name(i) + ": " + responseHeaders.value(i));
                 }
 
-                System.out.println(responseBody.string());
+                Log.i("ApiNetwork", "Code: " + response.code());
+                Log.i("ApiNetwork", responseBody.string());
             }
         }
         @Override
@@ -39,7 +42,7 @@ public class ApiNetwork {
     };
     public static void isAlive(){
         Request request = new Request.Builder()
-                .url(ENDPOINT)
+                .url("http://publicobject.com/helloworld.txt")
                 .method("GET", null)
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, isAliveCallback);

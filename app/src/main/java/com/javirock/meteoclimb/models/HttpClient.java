@@ -55,7 +55,7 @@ public class HttpClient {
     public static void asyncRequest(int method, Request request, Callback callback){
         switch (method){
             case GET: {
-                asyncGet();
+                asyncGet(request, callback);
                 break;
             }
             case POST: {
@@ -71,8 +71,8 @@ public class HttpClient {
     private Response syncPost(){
 
     }*/
-    private static void asyncGet(){
-
+    private static void asyncGet(Request request, Callback callback){
+        getHttpClient().newCall(request).enqueue(callback);
     }
     private static void asyncPost(){
 
