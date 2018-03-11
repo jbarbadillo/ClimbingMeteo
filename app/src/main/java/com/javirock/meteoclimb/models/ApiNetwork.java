@@ -71,6 +71,7 @@ public class ApiNetwork {
             try(ResponseBody responseBody = response.body()){
                 if (!response.isSuccessful()){
                     Log.i("ApiNetwork", "Code: " + response.code());
+                    // TODO: decide if we want to throw exception or not
                     throw new IOException("Unexpected code " + response);
                 }else{
                     Log.i("ApiNetwork", "Code: " + response.code());
