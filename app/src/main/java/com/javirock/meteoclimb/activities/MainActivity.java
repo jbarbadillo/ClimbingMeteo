@@ -13,10 +13,12 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     Button mEtxauri = null;
     Button mBaltzola = null;
+    ApiNetwork api = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        api = new ApiNetwork();
     }
 
     @Override
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         mEtxauri.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    ApiNetwork.getTownPredictionDay("31085");
+                    api.getTownPredictionDay("31085");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mBaltzola.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    ApiNetwork.getTownPredictionDay("48026");
+                    api.getTownPredictionDay("48026");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
