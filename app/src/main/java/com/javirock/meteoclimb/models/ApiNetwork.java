@@ -101,7 +101,8 @@ public class ApiNetwork {
             e.printStackTrace();
         }
     };
-    private static Callback getDataCallback = new Callback(){
+    private static Callback getDataCallback = new Callback()
+    {
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
