@@ -4,6 +4,9 @@ package com.javirock.meteoclimb.models;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +27,9 @@ import okhttp3.ResponseBody;
 public class ApiNetwork {
     private static final String URL = "https://opendata.aemet.es/opendata/api/";
     private static final String API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZpZXIuYmFyYmFkaWxsb0BnbWFpbC5jb20iLCJqdGkiOiJjZmJhN2U3Ny05YWY5LTQ5ZWEtYTU5NC04ZGE0Mjc3NTZlNmQiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTUyMDcxMjcwMywidXNlcklkIjoiY2ZiYTdlNzctOWFmOS00OWVhLWE1OTQtOGRhNDI3NzU2ZTZkIiwicm9sZSI6IiJ9.ryUk5Wljb7pmcfxJVyztO_tyzyPdv5peCaKRG5lpM_Y";
+
+    private static final Moshi moshi = new Moshi.Builder().build();
+    private static final JsonAdapter<JSONObject> gistJsonAdapter = moshi.adapter(JSONObject.class);
 
     private static Callback isAliveCallback = new Callback(){
         @Override
@@ -54,7 +60,7 @@ public class ApiNetwork {
 
                 String jsonData = responseBody.string();
                 try {
-                    JSONObject json = new JSONObject(jsonData);
+                    JSONObject json = gistJsonAdapter.fromJson(response.body().source());
                     String url = json.getString("datos");
                     getData(url);
                 } catch (JSONException e) {
@@ -92,7 +98,7 @@ public class ApiNetwork {
 
                 String jsonData = responseBody.string();
                 try {
-                    JSONObject json = new JSONObject(jsonData);
+                    JSONObject json = gistJsonAdapter.fromJson(response.body().source());
                     JSONArray precipitaciones = json.getJSONArray("probPrecipitacion");
                     Log.i("ApiNetwork", "Precip: " + precipitaciones.toString());
                 } catch (JSONException e) {
@@ -109,6 +115,7 @@ public class ApiNetwork {
     public static void getData(String url){
         Request request = new Request.Builder()
                 .url(url)
+                .addHeader("Accept", "application/json; q=0.5")
                 .method("GET", null)
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, getDataCallback);
