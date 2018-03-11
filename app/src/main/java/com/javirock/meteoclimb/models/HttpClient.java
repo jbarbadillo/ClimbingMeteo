@@ -1,7 +1,6 @@
 package com.javirock.meteoclimb.models;
 
-import java.io.File;
-import java.io.IOError;
+
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
@@ -14,11 +13,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.javirock.meteoclimb.models.HttpMethod.GET;

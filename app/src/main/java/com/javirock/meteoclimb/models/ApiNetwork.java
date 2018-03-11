@@ -45,6 +45,11 @@ public class ApiNetwork {
     static  class Values{
         List<String> estadoCielo;
     }
+
+    public interface ICallback{
+        void dailyData(JSONObject json);
+        void hourlyData(JSONObject json);
+    }
     private Callback isAliveCallback = new Callback(){
         @Override
         public void onResponse(Call call, Response response) throws IOException{
