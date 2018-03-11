@@ -112,21 +112,23 @@ public class ApiNetwork {
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-                Log.i("ApiNetwork", "Code: " + response.code());
-
-
-                try {
-                    JSONArray json = new JSONArray(responseBody.string());
-                    JSONObject predictions = new JSONObject(json.get(0).toString());
-                    JSONObject prediction = new JSONObject(predictions.getString("prediccion"));
-                    JSONArray dias = new JSONArray(prediction.getString("dia"));
-                    JSONObject dia = new JSONObject(dias.get(0).toString());
-                    JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
-                    Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
-                    mDelegate.dailyData(dia,null);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (!response.isSuccessful()){
+                    Log.i("ApiNetwork", "Code: " + response.code());
+                    throw new IOException("Unexpected code " + response);
+                }else {
+                    Log.i("ApiNetwork", "Code: " + response.code());
+                    try {
+                        JSONArray json = new JSONArray(responseBody.string());
+                        JSONObject predictions = new JSONObject(json.get(0).toString());
+                        JSONObject prediction = new JSONObject(predictions.getString("prediccion"));
+                        JSONArray dias = new JSONArray(prediction.getString("dia"));
+                        JSONObject dia = new JSONObject(dias.get(0).toString());
+                        JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
+                        Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
+                        mDelegate.dailyData(dia, null);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -213,15 +215,18 @@ public class ApiNetwork {
     private static Callback genericCallback = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
-
+            Log.i("ApiNetwork", "Failure: " + e.getMessage());
+            // Process error
         }
         @Override
         public void onResponse(Call call, Response response) throws IOException {
             try(ResponseBody responseBody = response.body()){
                 if (!response.isSuccessful()){
                     // Process error code and message
+                    Log.i("ApiNetwork", "Code: " + response.code());
                 }else{
                     // Process successful response
+                    Log.i("ApiNetwork", "Code: " + response.code());
                 }
             }
         }
