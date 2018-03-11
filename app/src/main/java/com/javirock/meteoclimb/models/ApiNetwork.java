@@ -151,7 +151,7 @@ public class ApiNetwork {
     }
     public  void isAlive(){
         Request request = new Request.Builder()
-                .url("http://publicobject.com/helloworld.txt")
+                .url("https://www.remote.com/api/vo/isAlive")
                 .method("GET", null)
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, isAliveCallback);

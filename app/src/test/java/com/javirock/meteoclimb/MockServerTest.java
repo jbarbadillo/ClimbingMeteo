@@ -27,7 +27,7 @@ public class MockServerTest {
     final Dispatcher dispatcher = new Dispatcher(){
         @Override
         public MockResponse dispatch(RecordedRequest request) throws InterruptedException{
-            if (request.getPath().equals("/api/v0/isAlive")){
+            if (request.getPath().equals("https://www.remote.com/api/vo/isAlive")){
                 return new MockResponse().setResponseCode(200)
                         .addHeader("Content-type","application/json")
                         .setBody("{}");
@@ -44,7 +44,7 @@ public class MockServerTest {
     public void setupTest(){
         try{
             server.setDispatcher(dispatcher);
-            server.start(8000);
+            server.start();
         }catch (IOException ioe){
             ioe.printStackTrace();
         }
@@ -53,6 +53,9 @@ public class MockServerTest {
     public void is_alive_request_returns_200() throws Exception {
         ApiNetwork api = new ApiNetwork();
         api.isAlive();
+
+        RecordedRequest request1 = server.takeRequest();
+        assertEquals("https://www.remote.com/api/vo/isAlive", request1.getPath());
     }
 
 }
