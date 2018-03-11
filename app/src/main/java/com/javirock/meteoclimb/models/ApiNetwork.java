@@ -2,6 +2,7 @@ package com.javirock.meteoclimb.models;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -102,8 +103,7 @@ public class ApiNetwork {
             e.printStackTrace();
         }
     };
-    private static Callback getDataCallback = new Callback()
-    {
+    private static Callback getDataCallback = new Callback(){
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
@@ -119,8 +119,7 @@ public class ApiNetwork {
                     JSONObject dia = new JSONObject(dias.get(0).toString());
                     JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
                     Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
-                    JSONObject res = new JSONObject(precipitaciones.toString());
-                    mDelegate.dailyData(res,null);
+                    mDelegate.dailyData(dia,null);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -138,6 +137,7 @@ public class ApiNetwork {
             }
         }
     };
+
     public static  void getData(String url){
         Request request = new Request.Builder()
                 .url(url)
@@ -184,5 +184,23 @@ public class ApiNetwork {
         HttpClient.asyncRequest(HttpMethod.GET, request, predictionDayCallback);
 
     }
+    //Example code
+    public static void genericRequest(String text, Bitmap image){
+        Request request = new Request.Builder()
+                .url(URL+"endpoint")
+                .addHeader("API_KEY", API_KEY)
+                .build();
+        HttpClient.asyncRequest(HttpMethod.POST, request, genericCallback);
+    }
+    private static Callback genericCallback = new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
+
+        }
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+
+        }
+    };
 
 }
