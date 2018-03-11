@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,10 @@ import java.util.Map;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -185,10 +190,23 @@ public class ApiNetwork {
 
     }
     //Example code
+    private static final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
+
     public static void genericRequest(String text, Bitmap image){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("text", text)
+                .addFormDataPart("image", "bitmap.jpeg",
+                        RequestBody.create(MEDIA_TYPE_JPEG, byteArray))
+                .build();
         Request request = new Request.Builder()
                 .url(URL+"endpoint")
                 .addHeader("API_KEY", API_KEY)
+                .post(requestBody)
                 .build();
         HttpClient.asyncRequest(HttpMethod.POST, request, genericCallback);
     }
@@ -199,7 +217,13 @@ public class ApiNetwork {
         }
         @Override
         public void onResponse(Call call, Response response) throws IOException {
-
+            try(ResponseBody responseBody = response.body()){
+                if (!response.isSuccessful()){
+                    // Process error code and message
+                }else{
+                    // Process successful response
+                }
+            }
         }
     };
 
