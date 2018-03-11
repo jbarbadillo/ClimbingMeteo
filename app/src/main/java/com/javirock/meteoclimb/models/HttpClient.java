@@ -129,6 +129,7 @@ public class HttpClient {
             builder.connectTimeout(5000, TimeUnit.MILLISECONDS)
                     .readTimeout(20000, TimeUnit.MILLISECONDS)
                     .writeTimeout(60000, TimeUnit.MILLISECONDS);
+            builder.retryOnConnectionFailure(false);
             OkHttpClient okHttpClient = builder.build();
             return okHttpClient;
         } catch (Exception e) {
