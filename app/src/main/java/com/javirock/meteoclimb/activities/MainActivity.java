@@ -2,6 +2,7 @@ package com.javirock.meteoclimb.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements ApiNetwork.ICallback {
+    private final static String TAG = "MainActivity";
     Button mEtxauri = null;
     Button mBaltzola = null;
     ApiNetwork api = null;
@@ -52,11 +54,11 @@ public class MainActivity extends AppCompatActivity implements ApiNetwork.ICallb
 
     @Override
     public void dailyData(JSONObject json, NetworkError error) {
-
+        Log.i(TAG, "dailyData");
     }
 
     @Override
     public void hourlyData(JSONObject json, NetworkError error) {
-
+        Log.i(TAG, "hourlyData");
     }
 }

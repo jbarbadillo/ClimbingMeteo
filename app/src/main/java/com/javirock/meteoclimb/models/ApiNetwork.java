@@ -119,8 +119,8 @@ public class ApiNetwork {
                     JSONObject dia = new JSONObject(dias.get(0).toString());
                     JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
                     Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
-
-                    //mDelegate.dailyData(,null);
+                    JSONObject res = new JSONObject(precipitaciones.toString());
+                    mDelegate.dailyData(res,null);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
