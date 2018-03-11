@@ -69,16 +69,20 @@ public class ApiNetwork {
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-                Log.i("ApiNetwork", "Code: " + response.code());
+                if (!response.isSuccessful()){
+                    Log.i("ApiNetwork", "Code: " + response.code());
+                    throw new IOException("Unexpected code " + response);
+                }else{
+                    Log.i("ApiNetwork", "Code: " + response.code());
 
 
-                try {
-                    JSONObject json = new JSONObject(responseBody.string());
-                    String url = json.getString("datos");
-                    getData(url);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    try {
+                        JSONObject json = new JSONObject(responseBody.string());
+                        String url = json.getString("datos");
+                        getData(url);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
