@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.javirock.meteoclimb.R;
 import com.javirock.meteoclimb.models.ApiNetwork;
+import com.javirock.meteoclimb.models.NetworkError;
 
 import org.json.JSONObject;
 
@@ -50,12 +51,12 @@ public class MainActivity extends AppCompatActivity implements ApiNetwork.ICallb
     }
 
     @Override
-    public void dailyData(JSONObject json) {
+    public void dailyData(JSONObject json, NetworkError error) {
 
     }
 
     @Override
-    public void hourlyData(JSONObject json) {
+    public void hourlyData(JSONObject json, NetworkError error) {
 
     }
 }

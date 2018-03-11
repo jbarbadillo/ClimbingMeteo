@@ -30,12 +30,13 @@ public class ApiNetwork {
     private static final String URL = "https://opendata.aemet.es/opendata/api/";
     private static final String API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZpZXIuYmFyYmFkaWxsb0BnbWFpbC5jb20iLCJqdGkiOiJjZmJhN2U3Ny05YWY5LTQ5ZWEtYTU5NC04ZGE0Mjc3NTZlNmQiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTUyMDcxMjcwMywidXNlcklkIjoiY2ZiYTdlNzctOWFmOS00OWVhLWE1OTQtOGRhNDI3NzU2ZTZkIiwicm9sZSI6IiJ9.ryUk5Wljb7pmcfxJVyztO_tyzyPdv5peCaKRG5lpM_Y";
 
-    private static Context mDelegate = null;
+    private static ICallback mDelegate = null;
     public interface ICallback{
-        void dailyData(JSONObject json);
-        void hourlyData(JSONObject json);
+        void dailyData(JSONObject json, NetworkError error);
+        void hourlyData(JSONObject json, NetworkError error);
     }
-    public static void setDelegate(Context context){
+    public static void setDelegate(ICallback context){
+
         mDelegate = context;
     }
     private static Callback isAliveCallback = new Callback(){
@@ -119,6 +120,7 @@ public class ApiNetwork {
                     JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
                     Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
 
+                    //mDelegate.dailyData(,null);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
