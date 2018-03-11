@@ -117,9 +117,12 @@ public class ApiNetwork {
 
                 try {
                     JSONArray json = new JSONArray(responseBody.string());
-                    Log.i("ApiNetwork", "json: " + json);
-                    //JSONArray precipitaciones = json.getJSONArray("probPrecipitacion");
-                    //Log.i("ApiNetwork", "Precip: " + precipitaciones.toString());
+                    JSONObject predictions = new JSONObject(json.get(0).toString());
+                    JSONObject prediction = new JSONObject(predictions.getString("prediccion"));
+                    JSONArray dias = new JSONArray(prediction.getString("dia"));
+                    JSONObject dia = new JSONObject(dias.get(0).toString());
+                    JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
+                    Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
