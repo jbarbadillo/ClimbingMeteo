@@ -74,8 +74,6 @@ public class ApiNetwork {
                     throw new IOException("Unexpected code " + response);
                 }else{
                     Log.i("ApiNetwork", "Code: " + response.code());
-
-
                     try {
                         JSONObject json = new JSONObject(responseBody.string());
                         String url = json.getString("datos");

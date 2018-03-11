@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements ApiNetwork.ICallb
         mEtxauri.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    ApiNetwork.getTownPredictionDay("31085-");
+                    ApiNetwork.getTownPredictionDay("31085");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
