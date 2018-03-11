@@ -125,8 +125,8 @@ public class HttpClient {
                     return true;
                 }
             });
-            builder.connectTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+            builder.connectTimeout(1, TimeUnit.SECONDS)
+                    .readTimeout(1, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS);
             OkHttpClient okHttpClient = builder.build();
             return okHttpClient;

@@ -85,6 +85,11 @@ public class ApiNetwork {
         @Override
         public void onFailure(Call call, IOException e) {
             e.printStackTrace();
+            if(e.getMessage().contains("CertPathValidatorException")){
+                Log.i("ApiNetwork", "Ignoring Failure: " + e.getMessage());
+            }else{
+                Log.i("ApiNetwork", "predictionDayCallback Failure: " + e.getMessage());
+            }
         }
     };
     private Callback predictionHoursCallback = new Callback(){
@@ -110,10 +115,6 @@ public class ApiNetwork {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 Log.i("ApiNetwork", "Code: " + response.code());
 
-                //String jsonData = responseBody.string();
-                //Log.i("ApiNetwork", "json: " + jsonData);
-
-                //Data json = gistJsonAdapter.fromJson(response.body().source());
 
                 try {
                     JSONArray json = new JSONArray(responseBody.string());
@@ -132,6 +133,12 @@ public class ApiNetwork {
         @Override
         public void onFailure(Call call, IOException e) {
             e.printStackTrace();
+
+            if(e.getMessage().contains("CertPathValidatorException")){
+                Log.i("ApiNetwork", "Ignoring Failure: " + e.getMessage());
+            }else{
+                Log.i("ApiNetwork", "getDataCallback Failure: " + e.getMessage());
+            }
         }
     };
     public  void getData(String url){
