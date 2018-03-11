@@ -1,6 +1,7 @@
 package com.javirock.meteoclimb.models;
 
 
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -29,28 +30,15 @@ public class ApiNetwork {
     private static final String URL = "https://opendata.aemet.es/opendata/api/";
     private static final String API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZpZXIuYmFyYmFkaWxsb0BnbWFpbC5jb20iLCJqdGkiOiJjZmJhN2U3Ny05YWY5LTQ5ZWEtYTU5NC04ZGE0Mjc3NTZlNmQiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTUyMDcxMjcwMywidXNlcklkIjoiY2ZiYTdlNzctOWFmOS00OWVhLWE1OTQtOGRhNDI3NzU2ZTZkIiwicm9sZSI6IiJ9.ryUk5Wljb7pmcfxJVyztO_tyzyPdv5peCaKRG5lpM_Y";
 
-    private final Moshi moshi = new Moshi.Builder().build();
-
-    private final JsonAdapter<Data> gistJsonAdapter = moshi.adapter(Data.class);
-
-    static class Data{
-        public List<Answer> answer;
-    }
-    static class Answer{
-        Map<String, Day> prediccion;
-    }
-    static class Day{
-        List<Values> values ;
-    }
-    static  class Values{
-        List<String> estadoCielo;
-    }
-
+    private static Context mDelegate = null;
     public interface ICallback{
         void dailyData(JSONObject json);
         void hourlyData(JSONObject json);
     }
-    private Callback isAliveCallback = new Callback(){
+    public static void setDelegate(Context context){
+        mDelegate = context;
+    }
+    private static Callback isAliveCallback = new Callback(){
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try (ResponseBody responseBody = response.body()) {
@@ -70,7 +58,7 @@ public class ApiNetwork {
             e.printStackTrace();
         }
     };
-    private Callback predictionDayCallback = new Callback(){
+    private static Callback predictionDayCallback = new Callback(){
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
@@ -97,7 +85,7 @@ public class ApiNetwork {
             }
         }
     };
-    private Callback predictionHoursCallback = new Callback(){
+    private static Callback predictionHoursCallback = new Callback(){
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
@@ -113,7 +101,7 @@ public class ApiNetwork {
             e.printStackTrace();
         }
     };
-    private Callback getDataCallback = new Callback(){
+    private static Callback getDataCallback = new Callback(){
         @Override
         public void onResponse(Call call, Response response) throws IOException{
             try(ResponseBody responseBody = response.body()){
@@ -129,6 +117,7 @@ public class ApiNetwork {
                     JSONObject dia = new JSONObject(dias.get(0).toString());
                     JSONArray precipitaciones = new JSONArray(dia.getString("probPrecipitacion"));
                     Log.i("ApiNetwork", "probPrecipitacion: " + precipitaciones.toString());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -146,7 +135,7 @@ public class ApiNetwork {
             }
         }
     };
-    public  void getData(String url){
+    public static  void getData(String url){
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Accept", "application/json; q=0.5")
@@ -154,14 +143,14 @@ public class ApiNetwork {
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, getDataCallback);
     }
-    public  void isAlive(){
+    public static void isAlive(){
         Request request = new Request.Builder()
                 .url("https://www.remote.com/api/vo/isAlive")
                 .method("GET", null)
                 .build();
         HttpClient.asyncRequest(HttpMethod.GET, request, isAliveCallback);
     }
-    public  JSONObject getSpainTowns(String location) throws IOException {
+    public static   JSONObject getSpainTowns(String location) throws IOException {
         Request request = new Request.Builder()
                 .url(URL+Endpoints.MUNICIPIOS)
                 .method("GET", null)
@@ -171,7 +160,7 @@ public class ApiNetwork {
         //Parse response un JSON
         return null;
     }
-    public  void getTownPredictionHours(String id) throws IOException {
+    public static  void getTownPredictionHours(String id) throws IOException {
         Request request = new Request.Builder()
                 .url(URL+Endpoints.MUNICIPIO_HORARIA+"/"+id)
                 .addHeader("API_KEY", API_KEY)
@@ -182,7 +171,7 @@ public class ApiNetwork {
         HttpClient.asyncRequest(HttpMethod.GET, request, predictionHoursCallback);
 
     }
-    public  void getTownPredictionDay(String id) throws IOException {
+    public static  void getTownPredictionDay(String id) throws IOException {
         Request request = new Request.Builder()
                 .url(URL+Endpoints.MUNICIPIO_DIARIA+id)
                 .addHeader("API_KEY", API_KEY)

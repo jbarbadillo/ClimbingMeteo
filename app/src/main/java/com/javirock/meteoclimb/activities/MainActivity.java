@@ -8,9 +8,11 @@ import android.widget.Button;
 import com.javirock.meteoclimb.R;
 import com.javirock.meteoclimb.models.ApiNetwork;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ApiNetwork.ICallback {
     Button mEtxauri = null;
     Button mBaltzola = null;
     ApiNetwork api = null;
@@ -18,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        api = new ApiNetwork();
+        ApiNetwork.setDelegate(this);
     }
 
     @Override
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         mEtxauri.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    api.getTownPredictionDay("31085");
+                    ApiNetwork.getTownPredictionDay("31085");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -39,11 +41,21 @@ public class MainActivity extends AppCompatActivity {
         mBaltzola.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
-                    api.getTownPredictionDay("48026");
+                    ApiNetwork.getTownPredictionDay("48026");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    @Override
+    public void dailyData(JSONObject json) {
+
+    }
+
+    @Override
+    public void hourlyData(JSONObject json) {
+
     }
 }
