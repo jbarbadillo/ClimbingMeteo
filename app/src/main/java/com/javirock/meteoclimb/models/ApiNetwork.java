@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -32,8 +33,17 @@ public class ApiNetwork {
 
     private final JsonAdapter<Data> gistJsonAdapter = moshi.adapter(Data.class);
 
-    class Data{
-        public Map<String, JSONObject> prediccion;
+    static class Data{
+        public List<Answer> answer;
+    }
+    static class Answer{
+        Map<String, Day> prediccion;
+    }
+    static class Day{
+        List<Values> values ;
+    }
+    static  class Values{
+        List<String> estadoCielo;
     }
     private Callback isAliveCallback = new Callback(){
         @Override
@@ -103,14 +113,16 @@ public class ApiNetwork {
                 //String jsonData = responseBody.string();
                 //Log.i("ApiNetwork", "json: " + jsonData);
 
-                Data json = gistJsonAdapter.fromJson(response.body().source());
-                Log.i("ApiNetwork", "json: " + json);
-               /* try {
-                    JSONArray precipitaciones = json.getJSONArray("probPrecipitacion");
+                //Data json = gistJsonAdapter.fromJson(response.body().source());
+
+                try {
+                    JSONArray json = new JSONArray(responseBody.string());
+                    Log.i("ApiNetwork", "json: " + json);
+                    //JSONArray precipitaciones = json.getJSONArray("probPrecipitacion");
                     //Log.i("ApiNetwork", "Precip: " + precipitaciones.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
 
         }
