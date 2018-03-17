@@ -43,7 +43,7 @@ public class MockServerTest {
     @Before
     public void setupTest(){
         try{
-            server.setDispatcher(dispatcher);
+            //server.setDispatcher(dispatcher);
             server.start();
         }catch (IOException ioe){
             ioe.printStackTrace();
@@ -51,8 +51,13 @@ public class MockServerTest {
     }
     @Test
     public void is_alive_request_returns_200() throws Exception {
-        ApiNetwork api = new ApiNetwork();
-        api.isAlive();
+        MockResponse mockedResponse = new MockResponse();
+        mockedResponse.setResponseCode(200);
+        mockedResponse.setBody("{}");
+
+        server.enqueue(mockedResponse);
+
+        ApiNetwork.isAlive();
 
         RecordedRequest request1 = server.takeRequest();
         assertEquals("https://www.remote.com/api/vo/isAlive", request1.getPath());

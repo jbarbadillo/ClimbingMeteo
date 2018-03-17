@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.javirock.meteoclimb.R;
 import com.javirock.meteoclimb.models.ApiNetwork;
 import com.javirock.meteoclimb.models.NetworkError;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements ApiNetwork.ICallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.addLogAdapter(new AndroidLogAdapter());
+        Logger.d("On create");
         setContentView(R.layout.activity_main);
         ApiNetwork.setDelegate(this);
     }

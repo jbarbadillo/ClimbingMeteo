@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonQualifier;
@@ -37,6 +38,9 @@ public class ApiNetwork {
     private static final String API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZpZXIuYmFyYmFkaWxsb0BnbWFpbC5jb20iLCJqdGkiOiJjZmJhN2U3Ny05YWY5LTQ5ZWEtYTU5NC04ZGE0Mjc3NTZlNmQiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTUyMDcxMjcwMywidXNlcklkIjoiY2ZiYTdlNzctOWFmOS00OWVhLWE1OTQtOGRhNDI3NzU2ZTZkIiwicm9sZSI6IiJ9.ryUk5Wljb7pmcfxJVyztO_tyzyPdv5peCaKRG5lpM_Y";
 
     private static ICallback mDelegate = null;
+
+
+
     public interface ICallback{
         void dailyData(JSONObject json, NetworkError error);
         void hourlyData(JSONObject json, NetworkError error);
